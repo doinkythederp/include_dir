@@ -1,5 +1,5 @@
 use crate::{Dir, File};
-use std::path::Path;
+use unix_path::Path;
 
 /// A directory entry, roughly analogous to [`std::fs::DirEntry`].
 #[derive(Debug, Clone, PartialEq)]

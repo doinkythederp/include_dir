@@ -80,6 +80,7 @@
 //! [track-path]: https://github.com/rust-lang/rust/issues/73921
 //! [cargo-vars]: https://doc.rust-lang.org/cargo/reference/environment-variables.html#environment-variables-cargo-sets-for-crates
 
+#![no_std]
 #![deny(
     elided_lifetimes_in_paths,
     future_incompatible,
@@ -89,6 +90,10 @@
     rust_2018_idioms
 )]
 #![cfg_attr(feature = "nightly", feature(doc_cfg))]
+
+extern crate alloc;
+#[cfg(feature = "std")]
+extern crate std;
 
 mod dir;
 mod dir_entry;

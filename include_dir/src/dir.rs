@@ -1,6 +1,5 @@
 use crate::{file::File, DirEntry};
-use std::fs;
-use std::path::Path;
+use unix_path::Path;
 
 /// A directory.
 #[derive(Debug, Clone, PartialEq)]
@@ -74,19 +73,20 @@ impl<'a> Dir<'a> {
     /// Creates parent directories of `path` if they do not already exist.
     /// Fails if some files already exist.
     /// In case of error, partially extracted directory may remain on the filesystem.
-    pub fn extract<S: AsRef<Path>>(&self, base_path: S) -> std::io::Result<()> {
+    #[cfg(feature = "std")]
+    pub fn extract<S: AsRef<std::path::Path>>(&self, base_path: S) -> std::io::Result<()> {
         let base_path = base_path.as_ref();
 
         for entry in self.entries() {
-            let path = base_path.join(entry.path());
+            let path = base_path.join(entry.path().to_str().unwrap());
 
             match entry {
                 DirEntry::Dir(d) => {
-                    fs::create_dir_all(&path)?;
+                    std::fs::create_dir_all(path.to_str().unwrap())?;
                     d.extract(base_path)?;
                 }
                 DirEntry::File(f) => {
-                    fs::write(path, f.contents())?;
+                    std::fs::write(path.to_str().unwrap(), f.contents())?;
                 }
             }
         }

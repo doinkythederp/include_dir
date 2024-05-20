@@ -1,7 +1,6 @@
-use std::{
-    fmt::{self, Debug, Formatter},
-    path::Path,
-};
+use alloc::format;
+use core::fmt::{self, Debug, Formatter};
+use unix_path::Path;
 
 /// A file with its contents stored in a `&'static [u8]`.
 #[derive(Clone, PartialEq, Eq)]
@@ -36,7 +35,7 @@ impl<'a> File<'a> {
 
     /// The file's contents interpreted as a string.
     pub fn contents_utf8(&self) -> Option<&str> {
-        std::str::from_utf8(self.contents()).ok()
+        core::str::from_utf8(self.contents()).ok()
     }
 }
 
